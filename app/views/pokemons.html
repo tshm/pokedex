@@ -1,53 +1,62 @@
 <div ng-controller="MainCtrl">
-  <h1>Pokedex</h1>
+  <h1
+    ng-swipe-left="setOffset(-1)"
+    ng-swipe-right="setOffset(-1)">Pokedex</h1>
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-xs-4">
       <label>Filter: 
         <input type="search" class="form-control"
           placeholder="search" ng-model="q"/>
       </label>
     </div>
 
-    <div class="col-md-2 pager">
-      <button class="btn" ng-click="setOffset(-1)" ng-hide="offset == 0">&lt;</button>
-      <button class="btn" ng-click="setOffset(+1)" ng-hide="offset > filtered.length - pageSize">&gt;</button>
-    </div>
+    <div class="col-xs-4 pager"
+      ng-include="'views/pager.html'"></div>
   </div>
 
   <div class="row">
-    <div class="item col-md-6 col-lg-4"
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"
       ng-class="{enlarge: focus.pokemon}"
       ng-repeat="pokemon in filtered = (pokemons |filter:q) |offset:offset |limitTo:pageSize track by pokemon.resource_uri"
       ng-click="focus.pokemon = focus.pokemon ? null : pokemon"
       ng-controller="PokemonCtrl">
 
-      <div class="basic row">
+      <div class="item">
 
-          <div class="col-md-8">
-            <h2>{{ pokemon.name }}</h2>
-            <span ng-repeat="sprite in info.sprites"
-              ng-controller="SpriteCtrl">
-              <img class="icon" ng-src="{{ uri }}" alt="{{ name }}"/>
-            </span>
-          </div>
-          <div class="col-md-4 types-abils">
-            <span class="type" ng-class="typ.name"
-              ng-repeat="typ in info.types">
-              {{ typ.name }}
-            </span>
-            <ul>
-              <li ng-repeat="ab in info.abilities">
-                <span>{{ ab.name }}</span>
-              </li>
-            </ul>
-          </div>
+        <div class="basic row">
+
+            <div class="col-xs-12 col-sm-6 col-md-6">
+              <h2>{{ pokemon.name }}</h2>
+              <span ng-repeat="sprite in info.sprites"
+                ng-controller="SpriteCtrl">
+                <img class="icon" ng-src="{{ uri }}" alt="{{ name }}"/>
+              </span>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 types-abils">
+              <span class="type" ng-class="typ.name"
+                ng-repeat="typ in info.types">
+                {{ typ.name }}
+              </span>
+              <ul>
+                <li ng-repeat="ab in info.abilities">
+                  <span>{{ ab.name }}</span>
+                </li>
+              </ul>
+            </div>
+
+        </div>
+
+        <div ng-show="focus.pokemon"
+          ng-include="'views/pokemon.html'"></div>
 
       </div>
 
-      <div ng-show="focus.pokemon"
-        ng-include="'views/pokemon.html'"></div>
-
     </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-offset-5"
+      ng-include="'views/pager.html'"></div>
   </div>
 
 </div>

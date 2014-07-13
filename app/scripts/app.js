@@ -1,9 +1,9 @@
 (function( window, undefined ) {
   'use strict';
-  var app = window.angular.module('pokedexApp', []);
+  var app = window.angular.module('pokedexApp', ['ngTouch']);
 
   app.value('baseurl', 'http://pokeapi.co/');
-  app.value('pageSize', 6 );
+  app.value('pageSize', 12 );
 
   app.filter('offset', function() {
     return function(arr, offset) {
@@ -121,14 +121,16 @@
     });
   }]);
 
-  app.controller('MoveCtrl', 
+  /*
+  app.controller('MoveCtrl',
       ['$scope', 'Coget', 'baseurl',
   function( $scope, Coget, baseurl ) {
-    // Coget.get( baseurl + $routeParams.uri )
-    // .success(function( dat ) {
-    //   $scope.info = dat;
-    // });
+    Coget.get( baseurl + $routeParams.uri )
+    .success(function( dat ) {
+      $scope.info = dat;
+    });
   }]);
+  */
 
 })( window );
 

@@ -26,8 +26,7 @@
 }
 
 .basic {
-  width: 300px;
-  margin: 0.5em;
+  margin-top: 1em;
 }
 .type {
   font-size: 1.3em;
@@ -95,5 +94,5 @@
 .bug      { background-color: darkgreen; color: white; }
 .dragon   { background-color: grey; color: white; }
 .fighting { background-color: pink; }
-.fairly   { background-color: lightgreen; }
+.fairy    { background-color: lightgreen; }
 
