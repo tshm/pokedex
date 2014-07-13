@@ -43,7 +43,12 @@
         <span>power: {{ moves[ move.name ].power }}</span>,
         <span>pp: {{ moves[ move.name ].pp }}</span>
         )
-        <p>{{ moves[ move.name ].description }}</p>
+        <button class="btn"
+          ng-click="move.show = true; $event.stopPropagation()"
+          ng-hide="move.show">show detail</button>
+        <p ng-show="move.show">
+          {{ moves[ move.name ].description }}
+        </p>
       </li>
     </ul>
   </div>
