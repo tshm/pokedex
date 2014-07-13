@@ -34,6 +34,19 @@
   </div>
 
   <div class="row">
+    <h4> evolution: </h4>
+    <ul>
+      <li>name: {{ evolutions[0].name }}</li>
+      <li>level: {{ evolutions[0].level }}</li>
+      <li>method: {{ evolutions[0].method }}</li>
+        <span ng-controller="SpriteCtrl">
+          <img class="icon" ng-src="{{ uri }}" alt="{{ name }}"/>
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="row">
     <h4> moves: </h4>
     <ul>
       <li ng-repeat="move in info.moves |filter:{learn_type:'level up'}">

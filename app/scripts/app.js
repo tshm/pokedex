@@ -3,7 +3,7 @@
   var app = window.angular.module('pokedexApp', ['ngTouch']);
 
   app.value('baseurl', 'http://pokeapi.co/');
-  app.value('pageSize', 12 );
+  app.value('pageSize', 6 );
 
   app.filter('offset', function() {
     return function(arr, offset) {
@@ -30,8 +30,8 @@
   }]);
 
   app.controller('MainCtrl',
-    ['$scope', '$window', 'Coget', 'baseurl', 'pageSize',
-  function( $scope, $window, Coget, baseurl, pageSize ) {
+    ['$scope', 'Coget', 'baseurl', 'pageSize',
+  function( $scope, Coget, baseurl, pageSize ) {
 
     $scope.pageSize = pageSize;
     $scope.offset = 0;
@@ -40,7 +40,7 @@
       'ground', 'rock', 'steel', 'electronic',
       'grass', 'ghost', 'dark', 'normal',
       'psychic', 'poison', 'bug', 'dragon',
-      'fighting', 'fairly'];
+      'fighting', 'fairy'];
 
     $scope.setOffset = function( dir ) {
       var offset = $scope.offset + dir * pageSize;
@@ -64,8 +64,7 @@
 
   }]);
 
-  app.controller('PokemonCtrl',
-      ['$scope', 'Coget', 'baseurl',
+  app.controller('PokemonCtrl', ['$scope', 'Coget', 'baseurl',
   function( $scope, Coget, baseurl ) {
     $scope.focus = { pokemon: null };
 
@@ -80,10 +79,13 @@
 
   app.controller('SpriteCtrl', ['$scope', 'Coget', 'baseurl',
   function( $scope, Coget, baseurl ) {
-    Coget.get( baseurl + $scope.sprite.resource_uri )
-    .success(function( dat ) {
-      $scope.uri = 'http://pokeapi.co/' + dat.image;
-      $scope.name = dat.pokemon.name;
+    $scope.$watch('sprite', function( sprite ) {
+      if ( !sprite ) { return; }
+      Coget.get( baseurl + sprite.resource_uri )
+      .success(function( dat ) {
+        $scope.uri = 'http://pokeapi.co/' + dat.image;
+        $scope.name = dat.pokemon.name;
+      });
     });
   }]);
 
@@ -102,12 +104,26 @@
       ['$scope', 'Coget', 'baseurl',
   function( $scope, Coget, baseurl ) {
     $scope.moves = {};
+    $scope.evolutions = [];
+
+    var getEvolutions = function( evols ) {
+      return evols.forEach(function( inf ) {
+        Coget.get( baseurl + inf.resource_uri )
+        .success(function( dat ) {
+          inf.name = dat.name;
+          $scope.sprite = dat.sprites[ 0 ];
+          $scope.evolutions.push( inf );
+        });
+      });
+    };
 
     $scope.$watch('focus.pokemon', function( pokemon ) {
       if ( !pokemon ) { return; }
       Coget.get( baseurl + pokemon.resource_uri )
       .success(function( dat ) {
         $scope.info = dat;
+
+        getEvolutions( dat.evolutions );
 
         dat.moves.filter(function( o ) {
           return o.learn_type === 'level up';
@@ -120,17 +136,6 @@
       });
     });
   }]);
-
-  /*
-  app.controller('MoveCtrl',
-      ['$scope', 'Coget', 'baseurl',
-  function( $scope, Coget, baseurl ) {
-    Coget.get( baseurl + $routeParams.uri )
-    .success(function( dat ) {
-      $scope.info = dat;
-    });
-  }]);
-  */
 
 })( window );
 
